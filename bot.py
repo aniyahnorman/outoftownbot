@@ -24,10 +24,10 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 # Connect to the PostgreSQL database using the DATABASE_URL environment variable
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-cursor = conn.cursor()
+c = conn.cursor()
 
 # Create a table if it doesn't exist
-cursor.execute('''
+c.execute('''
 CREATE TABLE IF NOT EXISTS out_of_town (
     user_id BIGINT,
     start_date DATE,
