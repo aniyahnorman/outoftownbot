@@ -7,7 +7,12 @@ import sqlite3
 from datetime import datetime, timedelta
 import asyncio
 import aiohttp
+from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
+
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 ssl_context = ssl.create_default_context(cafile=certifi.where())
 intents = discord.Intents.default()
 intents.messages = True
@@ -34,7 +39,7 @@ conn.commit()
 async def weekly_report():
     await bot.wait_until_ready()
     current_date = datetime.now()
-    if current_date.weekday() == 5:  # 6 corresponds to Sunday
+    if current_date.weekday() == 6:  # 6 corresponds to Sunday
         next_week = current_date + timedelta(days=7)
         c.execute('SELECT user_id, start_date, end_date FROM out_of_town')
         results = c.fetchall()
@@ -106,4 +111,4 @@ async def on_command_error(ctx, error):
 
 # Run the bot
 if __name__ == "__main__":
-    bot.run('MTI0ODQ3MTc4MDY3MTA5ODk5MA.G4nVpe.nJ9rzS2VDmPL6Jd3GCSvl-Dx94GpazcLsR_rdY')
+    bot.run(DISCORD_TOKEN)
