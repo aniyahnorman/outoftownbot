@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 import asyncio
 import aiohttp
 from dotenv import load_dotenv
+import psycopg2
 
 # Load environment variables from .env file
 load_dotenv()
@@ -20,16 +21,17 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-# Connect to SQLite database
-conn = sqlite3.connect('out_of_town.db')
-c = conn.cursor()
+# Connect to the PostgreSQL database using the DATABASE_URL environment variable
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+cursor = conn.cursor()
 
 # Create a table if it doesn't exist
-c.execute('''
+cursor.execute('''
 CREATE TABLE IF NOT EXISTS out_of_town (
-    user_id INTEGER,
-    start_date TEXT,
-    end_date TEXT
+    user_id BIGINT,
+    start_date DATE,
+    end_date DATE
 )
 ''')
 conn.commit()
